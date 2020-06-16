@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstdint>
-#include <vector>
-#include <iostream>
+#include "LocalFilesystem.h"
 
-#include <boost/filesystem.hpp>
+#include <cstdio>
+#include <cstring>
+#include <vector>
 
 //some terms
 //SCEIRODB (magic word) - sony computer entertainment interface readonly database (unicv file)
@@ -630,7 +630,7 @@ public:
    }
 
 public:
-   virtual bool read(boost::filesystem::path filepath) = 0;
+   virtual bool read(fs::path filepath) = 0;
 
 protected:
    bool read_table_item(std::ifstream& inputStream, std::uint64_t& index, std::uint32_t icv_salt);
@@ -650,7 +650,7 @@ public:
    }
 
 public:
-   bool read(boost::filesystem::path filepath);
+   bool read(fs::path filepath);
 };
 
 //this is a root object for icv.db - it contains list of SCEICVDB and SCEINULL blocks. there is no additional header
@@ -663,7 +663,7 @@ public:
    }
 
 public:
-   bool read(boost::filesystem::path filepath);
+   bool read(fs::path filepath);
 };
 
 #pragma pack(pop)

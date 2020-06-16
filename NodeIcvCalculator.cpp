@@ -1,10 +1,8 @@
 #include "NodeIcvCalculator.h"
-
-#include <string>
-#include <vector>
-
 #include "FilesDbParser.h"
 #include "Utils.h"
+
+#include <cstring>
 
 unsigned char* c_node_icvs(unsigned char* raw_data, std::uint32_t order)
 {

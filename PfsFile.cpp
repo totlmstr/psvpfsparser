@@ -4,7 +4,7 @@
 #include "PfsKeyGenerator.h"
 
 PfsFile::PfsFile(std::shared_ptr<ICryptoOperations> cryptops, std::shared_ptr<IF00DKeyEncryptor> iF00D, std::ostream& output, 
-                 const unsigned char* klicensee, boost::filesystem::path titleIdPath,
+                 const unsigned char* klicensee, fs::path titleIdPath,
                  const sce_ng_pfs_file_t& file, const sce_junction& filepath, const sce_ng_pfs_header_t& ngpfs, std::shared_ptr<sce_iftbl_base_t> table)
    : m_cryptops(cryptops), m_iF00D(iF00D), m_output(output), m_titleIdPath(titleIdPath),
      m_file(file), m_filepath(filepath), m_ngpfs(ngpfs), m_table(table)
@@ -32,7 +32,7 @@ int PfsFile::init_crypt_ctx(CryptEngineWorkCtx* work_ctx, sig_tbl_t& block, std:
    m_data.mode_index = img_spec_to_mode_index(m_ngpfs.image_spec);
    m_data.crypto_engine_flag = img_spec_to_crypto_engine_flag(m_ngpfs.image_spec) | CRYPTO_ENGINE_THROW_ERROR;
    m_data.key_id = m_ngpfs.key_id;
-   m_data.fs_attr = m_file.file.m_info.get_original_type();
+   m_data.fs_attr = static_cast<std::uint16_t>(m_file.file.m_info.get_original_type());
    m_data.block_size = m_table->get_header()->get_fileSectorSize();
 
    //--------------------------------
@@ -128,7 +128,7 @@ int PfsFile::init_crypt_ctx(CryptEngineWorkCtx* work_ctx, sig_tbl_t& block, std:
    return 0;
 }
 
-int PfsFile::decrypt_icv_file(boost::filesystem::path destination_root) const
+int PfsFile::decrypt_icv_file(fs::path destination_root) const
 {
    //create new file
 
@@ -201,7 +201,7 @@ int PfsFile::decrypt_icv_file(boost::filesystem::path destination_root) const
    return 0;
 }
 
-int PfsFile::decrypt_unicv_file(boost::filesystem::path destination_root) const
+int PfsFile::decrypt_unicv_file(fs::path destination_root) const
 {
    //create new file
 
@@ -363,7 +363,7 @@ int PfsFile::decrypt_unicv_file(boost::filesystem::path destination_root) const
    return 0;
 }
 
-int PfsFile::decrypt_file(boost::filesystem::path destination_root) const
+int PfsFile::decrypt_file(fs::path destination_root) const
 {
    if(img_spec_to_is_unicv(m_ngpfs.image_spec))
       return decrypt_unicv_file(destination_root);

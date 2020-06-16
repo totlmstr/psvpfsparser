@@ -1,21 +1,20 @@
 #pragma once
 
-#include <map>
-
-#include <boost/filesystem.hpp>
-
+#include "LocalFilesystem.h"
 #include "IF00DKeyEncryptor.h"
+
+#include <map>
 
 class F00DFileKeyEncryptor : public IF00DKeyEncryptor
 {
 private:
-   boost::filesystem::path m_filePath;
+   fs::path m_filePath;
 
    std::map<std::string, std::string> m_keyCache;
    bool m_isCacheLoaded;
 
 public:
-   F00DFileKeyEncryptor(boost::filesystem::path filePath);
+   F00DFileKeyEncryptor(fs::path filePath);
 
 private:
    int load_cache_flat_file();

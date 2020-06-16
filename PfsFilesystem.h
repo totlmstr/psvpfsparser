@@ -2,11 +2,10 @@
 
 #include <memory>
 
-#include <boost/filesystem.hpp>
-
 #include "IF00DKeyEncryptor.h"
 #include "ICryptoOperations.h"
 
+#include "LocalFilesystem.h"
 #include "FilesDbParser.h"
 #include "UnicvDbParser.h"
 #include "PfsPageMapper.h"
@@ -18,7 +17,7 @@ private:
    std::shared_ptr<IF00DKeyEncryptor> m_iF00D;
    std::ostream& m_output;
    unsigned char m_klicensee[0x10];
-   boost::filesystem::path m_titleIdPath;
+   fs::path m_titleIdPath;
 
 private:
    std::unique_ptr<FilesDbParser> m_filesDbParser;
@@ -27,7 +26,7 @@ private:
 
 public:
    PfsFilesystem(std::shared_ptr<ICryptoOperations> cryptops, std::shared_ptr<IF00DKeyEncryptor> iF00D, std::ostream& output, 
-                 const unsigned char* klicensee, boost::filesystem::path titleIdPath);
+                 const unsigned char* klicensee, fs::path titleIdPath);
 
 private:
    std::vector<sce_ng_pfs_file_t>::const_iterator find_file_by_path(const std::vector<sce_ng_pfs_file_t>& files, const sce_junction& p) const;
@@ -35,5 +34,5 @@ private:
 public:
    int mount();
 
-   int decrypt_files(boost::filesystem::path destTitleIdPath) const;
+   int decrypt_files(fs::path destTitleIdPath) const;
 };

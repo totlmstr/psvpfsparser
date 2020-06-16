@@ -1,8 +1,8 @@
 #pragma once
 
 #include <map>
-
-#include <boost/filesystem.hpp>
+#include <memory>
+#include <cstring>
 
 #include "IF00DKeyEncryptor.h"
 #include "ICryptoOperations.h"

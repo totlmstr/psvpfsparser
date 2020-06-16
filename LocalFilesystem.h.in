@@ -1,0 +1,4 @@
+#pragma once
+
+#include <@FS_INCLUDE_HEADER@>
+namespace fs = @FS_NAMESPACE@::filesystem;

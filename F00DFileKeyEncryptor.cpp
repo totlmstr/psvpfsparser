@@ -1,19 +1,18 @@
 #include "F00DFileKeyEncryptor.h"
 
-#include <boost/algorithm/string.hpp>
-
 #include <fstream>
+#include <regex>
 
 #include "Utils.h"
 
-F00DFileKeyEncryptor::F00DFileKeyEncryptor(boost::filesystem::path filePath)
+F00DFileKeyEncryptor::F00DFileKeyEncryptor(fs::path filePath)
    : m_filePath(filePath), m_isCacheLoaded(false)
 {
 }
 
 int F00DFileKeyEncryptor::load_cache_flat_file()
 {
-   if(!boost::filesystem::exists(m_filePath))
+   if(!fs::exists(m_filePath))
       return -1;
 
    std::ifstream input(m_filePath.generic_string().c_str());
@@ -21,12 +20,13 @@ int F00DFileKeyEncryptor::load_cache_flat_file()
       return -1;
 
    std::string line;
-   std::vector<std::string> tokens;
+   ;
    while(std::getline(input, line))
    {
-      //parse string - allow multiple split tokens
-      tokens.clear();
-      boost::split(tokens, line, boost::is_any_of(" \t,"));
+      // from: https://stackoverflow.com/a/58164098
+      std::regex re(" \t,");
+      std::sregex_token_iterator first{line.begin(), line.end(), re, -1}, last;
+      std::vector<std::string> tokens{first, last};
 
       //there should be exactly three values - titleid, key, value
       if(tokens.size() != 3)
@@ -57,7 +57,7 @@ int F00DFileKeyEncryptor::load_cache_flat_file()
 /*
 int F00DFileKeyEncryptor::load_cache_json_file()
 {
-   if(!boost::filesystem::exists(m_filePath))
+   if(!fs::exists(m_filePath))
       return -1;
 
    try
